@@ -34,14 +34,14 @@ screen_height = win32api.GetSystemMetrics(1)
 CoreX = int(screen_width / 2)
 CoreY = int(screen_height / 2)
 # 设置按键延迟时间
-pyautogui.PAUSE = 1
+pyautogui.PAUSE = 0.1
 
 
 #print (mode1)
 # 获取英雄联盟窗口的句柄
-#hwnd = win32gui.FindWindow(None, "League of Legends (TM) Client")
+hwnd = win32gui.FindWindow(None, "League of Legends (TM) Client")
 # # 设置窗口位置和大小
-#win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, 1280, 720, win32con.SWP_SHOWWINDOW)
+win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, 1280, 720, win32con.SWP_SHOWWINDOW)
 
 # 记录所需的各种位置
 play_pos = None
@@ -49,7 +49,7 @@ renji_pos = None
 renjiconfirm_pos =None
 find_pos = None
 
-last_yita_pos = (1222, 707)
+last_yita_pos = (1195, 692)
 keyboard = KeyboardController()
 mouse = MouseController()
 gth_pos = None
@@ -173,9 +173,9 @@ while True:
                     # 直接移动鼠标
                   # pyautogui.moveTo(shenji_pos[0], shenji_pos[1])
                     # 缓慢移动鼠标  duration 鼠标速度
-                    pyautogui.moveTo(shenji_pos[0], shenji_pos[1], duration = 1, tween = pyautogui.easeInOutQuad)
-                    delay4move_mouse = random_delay()
-                    time.sleep(delay4move_mouse)
+                    pyautogui.moveTo(shenji_pos[0], shenji_pos[1], duration = 0.2, tween = pyautogui.easeInOutQuad)
+                    # delay4move_mouse = random_delay()
+                    # time.sleep(delay4move_mouse)
                     mouse.click(Button.left)
                     mouse.release(Button.left)
                 if label_list[j] == 12:
@@ -244,35 +244,44 @@ while True:
                     #    time.sleep(10)
 
             # 敌我小兵差距
-            difference_value = label_list.count(0) - label_list.count(1)
-            print(difference_value,label_list.count(1))
-            if label_list.count(1) <= 1 and difference_value >= 5:
-                # 右键一塔的坐标，回到一塔
-                pyautogui.rightClick(x=last_yita_pos[0], y=last_yita_pos[1])
-                print("敌方人多，撤退")
-                time.sleep(5)
-            else:
-                # 按下A键后左键某一个记录值为友方小兵的坐标以此跟随我方小兵，并自动攻击，停止检测2秒
-                friend_xb_pos = None
-                enemy_xb_pos = None
+            if label_list[j] == 1 or label_list[j] == 0:
+                difference_value = label_list.count(0) - label_list.count(1)
+                print(difference_value,label_list.count(1))
+                # if label_list.count(1) <= 1 and difference_value >= 5:
+                if difference_value <=0:
+                    # 右键一塔的坐标，回到一塔
+                    pyautogui.rightClick(x=last_yita_pos[0], y=last_yita_pos[1])
+                    print("敌方人多，撤退")
+                else:
+                    # 按下A键后左键某一个记录值为友方小兵的坐标以此跟随我方小兵，并自动攻击，停止检测2秒
+                    friend_xb_pos = None
+                    enemy_xb_pos = None
                 # for k in range(len(index_list)):
                 #     if names.get(label_list[k],"") == "WFXB":
                 #         friend_xb_pos = target_list[k]
                 #         break
-                for k in range(len(index_list)):
-                    if names.get(label_list[k], "") == "WFXB":
-                        friend_xb_pos = target_list[k]
-                        break
-                if friend_xb_pos is not None:
-                    # 创建键盘和鼠标控制器对象
+                    for k in range(len(index_list)):
+                        if names.get(label_list[k], "") == "WFXB":
+                            friend_xb_pos = target_list[k]
+                            break
+                        if names.get(label_list[k], "") == "DFXB":
+                            enemy_xb_pos = target_list[k]
+                            break
+                    if enemy_xb_pos is not None:
+                        pyautogui.moveTo(enemy_xb_pos[0], enemy_xb_pos[1])
+                        keyboard.press('q')
+                        keyboard.release('q')
+                        enemy_xb_pos = None
+                    if friend_xb_pos is not None:
 
-                    keyboard.press('a')
-                    keyboard.release('a')
-                    time.sleep(0.1)
-                    pyautogui.moveTo(friend_xb_pos[0],friend_xb_pos[1])
-                    time.sleep(0.1)
-                    mouse.press(Button.right)
-                    mouse.release(Button.right)
-                    friend_xb_pos = None
-                    print("开始跟随小兵，攻击")
-                    time.sleep(6)
+                        keyboard.press('x')
+                        keyboard.release('x')
+
+                        pyautogui.moveTo(friend_xb_pos[0],friend_xb_pos[1])
+
+                        mouse.press(Button.right)
+                        mouse.release(Button.right)
+                        friend_xb_pos = None
+
+                        print("开始跟随小兵，攻击")
+                        time.sleep(2)
