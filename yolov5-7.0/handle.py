@@ -1,4 +1,5 @@
 import math
+import random
 import sys
 import threading
 import time
@@ -34,17 +35,44 @@ CoreX = int(screen_width / 2)
 CoreY = int(screen_height / 2)
 # 设置按键延迟时间
 pyautogui.PAUSE = 1
+
+
 #print (mode1)
 # 获取英雄联盟窗口的句柄
-hwnd = win32gui.FindWindow(None, "League of Legends (TM) Client")
+#hwnd = win32gui.FindWindow(None, "League of Legends (TM) Client")
 # # 设置窗口位置和大小
-win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, 1280, 720, win32con.SWP_SHOWWINDOW)
-#读取图片
+#win32gui.SetWindowPos(hwnd, win32con.HWND_TOP, 0, 0, 1280, 720, win32con.SWP_SHOWWINDOW)
+
+# 记录所需的各种位置
+play_pos = None
+renji_pos = None
+renjiconfirm_pos =None
+find_pos = None
+
 last_yita_pos = (1222, 707)
 keyboard = KeyboardController()
 mouse = MouseController()
 gth_pos = None
 shenji_pos  = None
+
+
+# 双击左键操作
+def double_left_click():
+    # Perform two clicks with a small delay in between
+    mouse.click(Button.left, 1)
+    time.sleep(0.1)
+    mouse.click(Button.left, 1)
+# 双击右键操作
+def double_right_click():
+    # Perform two clicks with a small delay in between
+    mouse.click(Button.right, 1)
+    time.sleep(0.1)
+    mouse.click(Button.right, 1)
+# 制作一个随机延迟的函数，模仿人类操作
+def random_delay(min_delay=1, max_delay=3):
+    delay = random.uniform(min_delay, max_delay)
+    return delay
+#循环读取图片
 while True:
     # im0 = screenshot()
     bbox = (0, 0, 1280, 720)
@@ -123,7 +151,7 @@ while True:
             for i in range(len(index_list)):
                 j = index_list[i]
                 x, y, W, h = target_list[j]
-                print("目标信号坐标:", x, y, W, h, "标签为：", label_list[j] if label_list[j] is not None else "N/A")
+                print("目标信号坐标:", x, y, W, h, "标签为：", names.get(label_list[j]) if label_list[j] is not None else "N/A")
 
                 #循环遍历，找到第一个名字叫GTH的，获取它的坐标
                 for m in range(len(index_list)):
@@ -142,63 +170,112 @@ while True:
                 #     last_yita_pos = (x,y)
                 #     # 如果检测到在标签为泉水，则打开按下背包键P键，双击标签为GTH的坐标，双击该坐标位置以购买物品，5秒后按下P键关闭背包，1分钟后右键前往一塔，期间停止检测10秒
                 #     # 打开背包
+                # 升级技能辣
                 if label_list[j] == 2:
-                    # 升级技能辣
-                    pyautogui.moveTo(shenji_pos[0], shenji_pos[1])
-                    time.sleep(1)
+
+                    # 直接移动鼠标
+                  # pyautogui.moveTo(shenji_pos[0], shenji_pos[1])
+                    # 缓慢移动鼠标  duration 鼠标速度
+                    pyautogui.moveTo(shenji_pos[0], shenji_pos[1], duration = 1, tween = pyautogui.easeInOutQuad)
+                    delay4move_mouse = random_delay()
+                    time.sleep(delay4move_mouse)
                     mouse.click(Button.left)
                     mouse.release(Button.left)
                 if label_list[j] == 12:
                     #按P打开背包
                     keyboard.press('p')
                     keyboard.release('p')
-                    if gth_pos is not None:
-                        pyautogui.moveTo(gth_pos[0], gth_pos[1])
-                        time.sleep(1)
-                        mouse.click(Button.left, clicks=2)
-                        mouse.release(Button.left)
-                        #再次按P关闭背包
-                        keyboard.press('p')
-                        keyboard.release('p')
-                        time.sleep(1)
+                    # 还识别不到装备位置，我采用绝对坐标了
+                    # 点击推荐界面
+                    pyautogui.moveTo(365, 45)
+                    mouse.click(Button.left)
+                    mouse.release(Button.left)
+                    delay4TJJM = random_delay()
+                    time.sleep(delay4TJJM)
+                 # pyautogui.moveTo(gth_pos[0], gth_pos[1])
+                    pyautogui.moveTo(365, 428)
+                    # 生成延迟
+                    A = random_delay()
+                    time.sleep(A)
+                    # 双击左键鼠标
+                    double_left_click()
+                    #再次按P关闭背包
+                    keyboard.press('p')
+                    keyboard.release('p')
 
-                        mouse.press(Button.left,2)
-                        mouse.release(Button.left)
-                        time.sleep(5)
-                        mouse.press(Button.left, 2)
-                        mouse.release(Button.left)
+                    # 生成延迟
+                    B = random_delay()
+                    time.sleep(B)
+
+                    # 双击左键鼠标
+                    double_left_click()
+
+                    # 生成延迟
+                    C = random_delay()
+                    time.sleep(C)
+
+
                     pyautogui.moveTo(last_yita_pos[0], last_yita_pos[1])
-                    time.sleep(30)
+                    mouse.click(Button.right)
+                    mouse.release(Button.right)
+                    time.sleep(10)
+                    # if gth_pos is not None:
+                    #    pyautogui.moveTo(gth_pos[0], gth_pos[1])
+                    #    # 生成延迟
+                    #    A = random_delay()
+                    #    time.sleep(A)
+                    #    mouse.click(Button.left, clicks=2)
+                    #    mouse.release(Button.left)
+                    #    #再次按P关闭背包
+                    #    keyboard.press('p')
+                    #    keyboard.release('p')
+                    #
+                    #    # 生成延迟
+                    #    B = random_delay()
+                    #    time.sleep(B)
+                    #
+                    #    mouse.press(Button.left,2)
+                    #    mouse.release(Button.left)
+                    #
+                    #    # 生成延迟
+                    #    C = random_delay()
+                    #    time.sleep(C)
+                    #
+                    #    mouse.press(Button.left, 2)
+                    #    mouse.release(Button.left)
+                    #    pyautogui.moveTo(last_yita_pos[0], last_yita_pos[1])
+                    #    time.sleep(10)
 
-                # 敌我小兵差距
-                difference_value = label_list.count(0) - label_list.count(1)
-                if label_list.count(1) == 1 and difference_value >= 5:
-                    # 右键一塔的坐标，回到一塔
-                    pyautogui.rightClick(x=last_yita_pos[0], y=last_yita_pos[1])
-                    print("敌方人多，撤退")
-                    time.sleep(5)
-                else:
-                    # 按下A键后左键某一个记录值为友方小兵的坐标以此跟随我方小兵，并自动攻击，停止检测2秒
+            # 敌我小兵差距
+            difference_value = label_list.count(0) - label_list.count(1)
+            print(difference_value,label_list.count(1))
+            if label_list.count(1) <= 1 and difference_value >= 5:
+                # 右键一塔的坐标，回到一塔
+                pyautogui.rightClick(x=last_yita_pos[0], y=last_yita_pos[1])
+                print("敌方人多，撤退")
+                time.sleep(5)
+            else:
+                # 按下A键后左键某一个记录值为友方小兵的坐标以此跟随我方小兵，并自动攻击，停止检测2秒
+                friend_xb_pos = None
+                enemy_xb_pos = None
+                # for k in range(len(index_list)):
+                #     if names.get(label_list[k],"") == "WFXB":
+                #         friend_xb_pos = target_list[k]
+                #         break
+                for k in range(len(index_list)):
+                    if names.get(label_list[k], "") == "WFXB":
+                        friend_xb_pos = target_list[k]
+                        break
+                if friend_xb_pos is not None:
+                    # 创建键盘和鼠标控制器对象
+
+                    keyboard.press('a')
+                    keyboard.release('a')
+                    time.sleep(0.1)
+                    pyautogui.moveTo(friend_xb_pos[0],friend_xb_pos[1])
+                    time.sleep(0.1)
+                    mouse.press(Button.right)
+                    mouse.release(Button.right)
                     friend_xb_pos = None
-                    enemy_xb_pos = None
-                    # for k in range(len(index_list)):
-                    #     if names.get(label_list[k],"") == "WFXB":
-                    #         friend_xb_pos = target_list[k]
-                    #         break
-                    for k in range(len(index_list)):
-                        if names.get(label_list[k], "") == "DFXB":
-                            friend_xb_pos = target_list[k]
-                            break
-                    if friend_xb_pos is not None:
-                        # 创建键盘和鼠标控制器对象
-
-                        keyboard.press('a')
-                        keyboard.release('a')
-                        time.sleep(0.1)
-                        pyautogui.moveTo(friend_xb_pos[0],friend_xb_pos[1])
-                        time.sleep(0.1)
-                        mouse.press(Button.right)
-                        mouse.release(Button.right)
-                        friend_xb_pos = None
-                        print("开始跟随小兵，攻击")
-                        time.sleep(6)
+                    print("开始跟随小兵，攻击")
+                    time.sleep(6)
