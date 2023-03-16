@@ -153,6 +153,7 @@ while True:
                 x, y, W, h = target_list[j]
                 print("目标信号坐标:", x, y, W, h, "标签为：", names.get(label_list[j]) if label_list[j] is not None else "N/A")
 
+                # 英雄联盟脚本
                 #循环遍历，找到第一个名字叫GTH的，获取它的坐标
                 for m in range(len(index_list)):
                     if names.get(label_list[m], "") == "GTH":
@@ -164,12 +165,8 @@ while True:
                         shenji_pos = target_list[sj]
                         print("升级的位置在:", shenji_pos if shenji_pos is not None else "N/A")
                         break
-                # 英雄联盟脚本
-                # 开局记录标签为一塔的坐标,并永不更改
-                # if label_list[j] == 14 and last_yita_pos is None:
-                #     last_yita_pos = (x,y)
-                #     # 如果检测到在标签为泉水，则打开按下背包键P键，双击标签为GTH的坐标，双击该坐标位置以购买物品，5秒后按下P键关闭背包，1分钟后右键前往一塔，期间停止检测10秒
-                #     # 打开背包
+
+
                 # 升级技能辣
                 if label_list[j] == 2:
 
