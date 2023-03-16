@@ -1,0 +1,14 @@
+<annotation>
+	<folder>train2017</folder>
+	<filename>train2.jpg</filename>
+	<path>C:\Users\Administrator\Desktop\ComputerProject\datasets\coco128\images\train2017\train2.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>720</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+</annotation>

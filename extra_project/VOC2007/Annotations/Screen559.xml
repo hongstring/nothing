@@ -1,0 +1,26 @@
+<annotation>
+	<folder>JPEGImages</folder>
+	<filename>Screen559.png</filename>
+	<path>E:\darknet-master\scripts\VOCdevkit\VOC2007\JPEGImages\Screen559.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>720</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>DFYX</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>744</xmin>
+			<ymin>157</ymin>
+			<xmax>854</xmax>
+			<ymax>176</ymax>
+		</bndbox>
+	</object>
+</annotation>
